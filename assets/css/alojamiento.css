@@ -1,0 +1,131 @@
+.accommodation-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.accommodation-cards article {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.accommodation-cards article img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 15px;
+    display: grid;
+    grid-template-areas:
+        "title title"
+        "location price"
+        "features features"
+        "rating rating";
+    gap: 10px;
+    flex-grow: 1;
+}
+
+.card-content h2.card-title {
+    grid-area: title;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.card-content .card-location {
+    grid-area: location;
+    color: #666;
+}
+
+.card-content .card-price {
+    grid-area: price;
+    font-weight: bold;
+    color: #666;
+    text-align: right;
+}
+
+.card-content .card-features {
+    grid-area: features;
+    display: flex;
+    gap: 10px;
+    border-top: 1px solid #eee;
+    padding: 10px 0;
+}
+
+.card-content [class*="card-rating"] {
+    grid-area: rating;
+    color: #ffd700;
+}
+
+.book-now {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #4785FF;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 0 0 10px 10px;
+    transition: background-color 0.3s ease;
+    margin-top: auto;
+    grid-column: 1 / -1;
+}
+
+.book-now:hover {
+    background-color: #6366F1;
+    color: white;
+}
+
+#accommodation-section {
+    background-color: #f9f9f9;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+#accommodation-section article {
+    margin-bottom: 20px;
+}
+
+a[href*="alojamientos"]:visited {
+    color: #3498db;
+}
+
+
+@media (max-width: 600px) {
+    .accommodation-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .card-content {
+        grid-template-areas:
+            "title"
+            "location"
+            "price"
+            "features"
+            "rating";
+    }
+
+    .card-content h2.card-title {
+        font-size: 1.1rem;
+    }
+
+    .card-content .card-price {
+        font-size: 0.9rem;
+        text-align: left;
+    }
+
+    .book-now {
+        padding: 12px;
+        font-size: 1rem;
+    }
+}

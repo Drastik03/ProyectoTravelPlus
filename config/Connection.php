@@ -3,14 +3,14 @@ class Connection
 {
     public static function getConnection()
     {
-        $conn = null;
+        $connection = null;
         try {
-            $conn = new PDO(
+            $connection = new PDO(
                 'mysql:host=localhost;dbname='. DB_NAME,
                 DB_USERNAME,
                 DB_PASSWORD
             );
-            $conn->setAttribute(
+            $connection->setAttribute(
                 PDO::ATTR_ERRMODE,
                 PDO::ERRMODE_EXCEPTION
             );
@@ -18,7 +18,7 @@ class Connection
             echo "Error: " . $e->getMessage();
             die("error " . $e->getMessage());
         }
-        return $conn;
+        return $connection;
     }
 }
 ?>

@@ -8,6 +8,8 @@
     $function = (!empty($_REQUEST['action'])) ? htmlentities($_REQUEST['action']) : DEFAULT_METHOD;
 
     require_once 'controller/' . $controller . '.php';
+    var_dump($controller, $function);
+
     $app = new $controller;
     $app->$function();
 ?>

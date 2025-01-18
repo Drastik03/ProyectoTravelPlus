@@ -34,7 +34,7 @@
                 <a class="nav-options nav-main-link" href="/pages/excursiones.html">Excursiones</a>
                 <a class="nav-options nav-main-link" href="/index.html">Destinos</a>
                 <a class="nav-options nav-main-link" href="/pages/alojamientos.html">Alojamientos</a>
-                <a class="btn-register nav-main-link" href="/index.html">
+                <a class="btn-register nav-main-link" href="index.php?app=user&action=register_new">
                     Iniciar Sesion
                 </a>
             </div>

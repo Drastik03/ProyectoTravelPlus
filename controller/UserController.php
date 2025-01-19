@@ -1,4 +1,5 @@
 <?php
+//author: VEAS NOBOA JOHAN DAVID
 require_once './model/dao/UserDao.php';
 require_once './model/dto/User.php';
 require_once './helpers/redirect.php';
@@ -10,6 +11,18 @@ class UserController
         $this->model = new UserDAO();
     }
     public function index()
+    {
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;  
+        $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;  
+        $offset = ($page - 1) * $limit;  
+        $users = $this->model->getAllUsers($limit, $offset);
+        $totalUsers = $this->model->getTotalUsers();  
+        $totalPages = ceil($totalUsers / $limit);  
+        require_once './view/user/user.list.php';
+    }
+    
+
+    public function register_new()
     {
         require_once './view/user/register.php';
     }
@@ -61,13 +74,36 @@ class UserController
         header("Location: $redirectUrl");
         exit();
     }
-
-
-
     public function login()
     {
-        require_once './view/user/login.php';
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $username = isset($_POST['username']) ? htmlentities(trim($_POST['username'])) : '';
+            $password = isset($_POST['password']) ? htmlentities(trim($_POST['password'])) : '';
+
+            $user = $this->model->getUserByUsername($username);
+            if ($user) {
+                $storedPassword = $user->password;
+                if (password_verify($password, $storedPassword)) {
+                    if (session_status() == PHP_SESSION_NONE) {
+                        session_start();
+                    }
+                    $_SESSION['username'] = $user->username;
+                    $_SESSION['id'] = $user->id;
+                    $_SESSION['user_logged_in'] = true;
+                    header('Location: index.php?app=index&action=index');
+                    exit();
+                } else {
+                    $this->redirectWithMessage(false, '', 'Usuario o contraseña incorrectos', 'index.php?app=user&action=login');
+                }
+            } else {
+                $this->redirectWithMessage(false, '', 'Usuario o contraseña incorrectos', 'index.php?app=user&action=login');
+            }
+        } else {
+            require_once './view/user/login.php';
+        }
     }
+
+
     public function cleandData($user)
     {
         $user->__set('name', htmlspecialchars(trim($user->__get('name'))));
@@ -76,5 +112,12 @@ class UserController
         $user->__set('password', trim($user->__get('password')));
         return $user;
     }
+    public function logout()
+    {
+        session_start();
+        session_unset();
+        session_destroy();
+        header('Location: index.php?app=user&action=login');
+        exit();
+    }
 }
-?>

@@ -11,7 +11,6 @@ if (session_status() == PHP_SESSION_NONE) {
         <h2 class="text-center mb-3">Regístrate</h2>
         <form method="post" action="index.php?app=user&action=register">
             <?php
-            // Mostrar el mensaje si existe en la sesión
             if (isset($_SESSION['mensaje'])):
             ?>
                 <div class="p-3 alert alert-<?php echo $_SESSION['color']; ?> alert-dismissible fade show" role="alert">
@@ -22,7 +21,6 @@ if (session_status() == PHP_SESSION_NONE) {
                 </div>
 
                 <?php
-                // Limpiar el mensaje después de mostrarlo
                 unset($_SESSION['mensaje']);
                 unset($_SESSION['color']);
                 ?>

@@ -1,4 +1,9 @@
 <?php require_once HEADER; ?>
+<header class="header-info">
+            <h1>Aventuras Sin Límites</h1>
+            <p>Descubre el mundo con nosotros - Experiencias únicas que cambian vidas</p>
+            <a href="../index.html" class="cta-button">Comienza Tu Aventura</a>
+        </header>
 <section class="about-us">
     <div class="container">
         <h2 class="title">Acerca de Nosotros</h2>

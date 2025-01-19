@@ -1,0 +1,172 @@
+.excursiones-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    padding: 15px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.excursion-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.excursion-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.excursion-card-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.excursion-card-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-grow: 1;
+}
+
+.excursion-card-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.excursion-card-description {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.4;
+}
+
+.excursion-card-details {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: #777;
+}
+
+.excursion-card-rating {
+    color: #ffd700;
+    font-size: 1.1rem;
+}
+
+.excursion-card-button {
+    padding: 10px;
+    background-color: #4785FF;
+    color: #fff;
+    border: none;
+    font-size: 1rem;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 6px;
+    margin-top: auto;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 500;
+}
+
+.excursion-card-button:hover {
+    background-color: #6366F1;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .excursiones-container {
+        grid-template-columns: 1fr;
+    }
+
+    .excursion-card-content {
+        padding: 12px;
+    }
+
+    .excursion-card-title {
+        font-size: 1.1rem;
+    }
+
+    .excursion-card-description {
+        font-size: 0.85rem;
+    }
+
+    .excursion-card-button {
+        padding: 12px;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .excursion-card-content {
+        padding: 10px;
+    }
+
+    .excursion-card-title {
+        font-size: 1rem;
+    }
+
+    .excursion-card-description {
+        font-size: 0.85rem;
+    }
+
+    .excursion-card-details {
+        font-size: 0.75rem;
+    }
+
+    .excursion-card-button {
+        padding: 14px;
+        font-size: 1rem;
+    }
+}
+
+.excursion-card-services {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    color: #666;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.excursion-card-services h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+    width: 100%;
+}
+
+.excursion-card-services ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 8px;
+}
+
+.excursion-card-services li {
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #777;
+    position: relative;
+}
+
+.excursion-card-services li::before {
+    content: '✔';
+    margin-right: 6px;
+    color: #4CAF50;
+    font-size: 1rem;
+}

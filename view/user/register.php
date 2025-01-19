@@ -1,5 +1,4 @@
 <?php
-// Asegúrate de iniciar la sesión al principio
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }

@@ -1,5 +1,4 @@
 <?php
-//author: VEAS NOBOA JOHAN DAVID
 require_once './model/dao/UserDao.php';
 require_once './model/dto/User.php';
 require_once './helpers/redirect.php';
@@ -12,15 +11,22 @@ class UserController
     }
     public function index()
     {
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;  
-        $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;  
-        $offset = ($page - 1) * $limit;  
-        $users = $this->model->getAllUsers($limit, $offset);
-        $totalUsers = $this->model->getTotalUsers();  
-        $totalPages = ceil($totalUsers / $limit);  
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
+        if (empty($page) || $page < 1 || $limit < 1) {
+            header('Location: index.php?app=user&action=index&page=1');
+            exit;
+        }
+        $totalUsers = $this->model->getTotalUsers();
+        $totalPages = ceil($totalUsers / $limit);
+        if ($page > $totalPages) {
+            header('Location: index.php?app=user&action=index&page=' . $totalPages);
+        } else {
+            $offset = ($page - 1) * $limit;
+            $users = $this->model->getAllUsers($limit, $offset);
+        }
         require_once './view/user/user.list.php';
     }
-    
 
     public function register_new()
     {

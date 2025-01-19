@@ -1,4 +1,5 @@
 <?php
+//AUTHOR: VEAS NOBOA JOHAN DAVID
 require_once './model/dao/ExcursionDao.php';
 require_once './model/dao/ExcursionDao.php';
 
@@ -9,6 +10,9 @@ class ExcursionController{
     }
     public function index(){
         require_once './view/excursions/excursions.list.php';
+    }
+    public function view_new(){
+        require_once './view/excursions/excursions.new.php';
     }
 }
 

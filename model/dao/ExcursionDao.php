@@ -1,4 +1,5 @@
 <?php
+//AUTHOR: VEAS NOBOA JOHAN DAVID
 require_once './config/Connection.php';
 class ExcursionDao{
     private $conn;

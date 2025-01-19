@@ -1,5 +1,7 @@
-<?php require_once HEADER ; ?>
-
+<?php 
+    require_once HEADER; 
+    //AUTHOR: VEAS NOBOA JOHAN DAVID
+?>
 <main class="container">
     <h1 style="font-size: 2rem; text-align: center; font-weight: bold; padding-left: 20px; margin: 20px 0;">Nueva
         Excursión</h1>
@@ -9,7 +11,12 @@
             <input type="text" id="nombre" name="nombre">
             <span class="error-message">Este campo es obligatorio</span>
         </div>
-
+        <div class="form-group">
+            <!--imagn-->
+            <label for="imagen" class="required">Imagen</label>
+            <input type="file" id="image" name="image">
+            <span class="error-message">Este campo es obligatorio</span>
+        </div>
         <div class="form-row">
             <div class="form-group">
                 <label for="categoria" class="required">Categoría</label>
@@ -22,14 +29,9 @@
                 <span class="error-message">Seleccione una categoría</span>
             </div>
             <div class="form-group">
-                <label for="dificultad" class="required">Dificultad</label>
-                <select id="dificultad" name="dificultad">
-                    <option value="">Seleccionar</option>
-                    <option value="facil">Fácil</option>
-                    <option value="moderado">Moderado</option>
-                    <option value="dificil">Difícil</option>
-                </select>
-                <span class="error-message">Seleccione la dificultad</span>
+                <label for="fecha_inicio">Fecha de Inicio:</label>
+                <input type="date" id="fecha_inicio" name="fecha_inicio" required>
+                <span class="error-message">Seleccione una fecha actual o superior</span>
             </div>
         </div>
 
@@ -52,21 +54,6 @@
             <span class="error-message">Ingrese una descripción</span>
         </div>
 
-        <fieldset class="checkbox-grid">
-            <legend>Servicios Incluidos</legend>
-            <label>
-                <input type="checkbox" name="servicios" value="guia"> Guía
-            </label>
-            <label>
-                <input type="checkbox" name="servicios" value="transporte"> Transporte
-            </label>
-            <label>
-                <input type="checkbox" name="servicios" value="equipo"> Equipo
-            </label>
-            <div class="error-message" style="display: none; color: red;">Debe seleccionar al menos un servicio
-            </div>
-        </fieldset>
-
         <div class="actions">
             <button type="reset" class="btn-secondary">Limpiar</button>
             <button type="submit" class="btn-primary">Guardar</button>
@@ -74,4 +61,4 @@
     </form>
 </main>
 
-<? require_once FOOTER ; ?>
+<?php require_once FOOTER; ?>

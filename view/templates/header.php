@@ -18,6 +18,8 @@ if (session_status() == PHP_SESSION_NONE) {
     <link rel="stylesheet" href="./assets/css/nosotros.css">
     <link rel="stylesheet" href="./assets/css/politica.css">
     <link rel="stylesheet" href="./assets/css/excursiones.css">
+    <link rel="stylesheet" href="./assets/css/excursion_new.css">
+
 
     <title>TravelPlus SA</title>
 </head>

@@ -1,5 +1,4 @@
 <?php
-//autho: VEAS NOBOA JOHAN DAVID
 require_once HEADER;
 ?>
 <div class="d-flex justify-content-center align-items-center">

@@ -10,6 +10,8 @@ class Connection
                 DB_USERNAME,
                 DB_PASSWORD
             );
+            //cambiar cotejamiento
+            $connection->exec("SET NAMES 'utf8mb4'");
             $connection->setAttribute(
                 PDO::ATTR_ERRMODE,
                 PDO::ERRMODE_EXCEPTION

@@ -1,17 +1,14 @@
 <?php
 class RedirectWithMessage {
-    public function redirectWithMessage($exito, $mensajeExito, $mensajeError, $url)
+    public function redirectWithMessage($exito, $exitoMsg, $errMsg, $redirectUrl)
     {
-        if ($exito) {
-            $_SESSION['mensaje'] = $mensajeExito;
-            $_SESSION['color'] = 'success';
-        } else {
-            $_SESSION['mensaje'] = $mensajeError;
-            $_SESSION['color'] = 'danger';
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
         }
-    
-        header("Location: $url");
-        exit;
+        $_SESSION['mensaje'] = ($exito) ? $exitoMsg : $errMsg;
+        $_SESSION['color'] = ($exito) ? 'primary' : 'danger';
+        header("Location: $redirectUrl");
+        exit();
     }
 }
 

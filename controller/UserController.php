@@ -35,7 +35,8 @@ class UserController
     public function register()
     {
         if ($_SERVER["REQUEST_METHOD"] != "POST") {
-            $this->redirectWithMessage(false, "Método no permitido", "El método utilizado no es permitido", "index.php?app=user&f=index");
+            $msg = new RedirectWithMessage();
+            $msg->redirectWithMessage(false, "Método no permitido", "El método utilizado no es permitido", "index.php?app=user&f=index");
             return;
         }
         $name = isset($_POST['name']) ? trim($_POST['name']) : '';
@@ -53,15 +54,16 @@ class UserController
             $user->__set('rol_id', 1);
             $user->__set('password', $hashedPassword);
             $result = $this->model->insert($user);
+            $msg = new RedirectWithMessage();
             if ($result) {
-                $this->redirectWithMessage(
+                $msg->redirectWithMessage(
                     true,
                     'El usuario se ha creado correctamente',
                     'No se pudo registrar al usuario',
                     'index.php?app=user&action=index'
                 );
             } else {
-                $this->redirectWithMessage(
+                $msg->redirectWithMessage(
                     false,
                     'No se pudo registrar al usuario',
                     'Hubo un problema al intentar registrar el usuario',
@@ -70,16 +72,7 @@ class UserController
             }
         }
     }
-    public function redirectWithMessage($exito, $exitoMsg, $errMsg, $redirectUrl)
-    {
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-        $_SESSION['mensaje'] = ($exito) ? $exitoMsg : $errMsg;
-        $_SESSION['color'] = ($exito) ? 'primary' : 'danger';
-        header("Location: $redirectUrl");
-        exit();
-    }
+    
     public function login()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -99,10 +92,12 @@ class UserController
                     header('Location: index.php?app=index&action=index');
                     exit();
                 } else {
-                    $this->redirectWithMessage(false, '', 'Usuario o contraseña incorrectos', 'index.php?app=user&action=login');
+                    $msg = new RedirectWithMessage();
+                    $msg->redirectWithMessage(false, '', 'Usuario o contraseña incorrectos', 'index.php?app=user&action=login');
                 }
             } else {
-                $this->redirectWithMessage(false, '', 'Usuario o contraseña incorrectos', 'index.php?app=user&action=login');
+                $msg = new RedirectWithMessage();
+                $msg->redirectWithMessage(false, '', 'Usuario o contraseña incorrectos', 'index.php?app=user&action=login');
             }
         } else {
             require_once './view/user/login.php';

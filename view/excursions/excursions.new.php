@@ -1,11 +1,32 @@
-<?php 
-    require_once HEADER; 
-    //AUTHOR: VEAS NOBOA JOHAN DAVID
+<?php
+require_once HEADER;
+//AUTHOR: VEAS NOBOA JOHAN DAVID
+?>
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 ?>
 <main class="container">
     <h1 style="font-size: 2rem; text-align: center; font-weight: bold; padding-left: 20px; margin: 20px 0;">Nueva
         Excursión</h1>
-    <form id="excursionForm" class="form-grid" novalidate>
+    <?php
+    if (isset($_SESSION['mensaje'])):
+    ?>
+        <div class="p-3 alert alert-<?php echo $_SESSION['color']; ?> alert-dismissible fade show" role="alert">
+            <?php echo $_SESSION['mensaje']; ?>
+            <a href="index.php?app=user&action=login" class="text-primary text-decoration-none">
+                <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+            </a>
+        </div>
+
+        <?php
+        unset($_SESSION['mensaje']);
+        unset($_SESSION['color']);
+        ?>
+    <?php endif; ?>
+    <form method="post" id="excursionForm" class="form-grid" action="index.php?app=excursion&action=register_excursion" novalidate
+        enctype="multipart/form-data">
         <div class="form-group">
             <label for="nombre" class="required">Nombre</label>
             <input type="text" id="nombre" name="nombre">
@@ -22,9 +43,9 @@
                 <label for="categoria" class="required">Categoría</label>
                 <select id="categoria" name="categoria">
                     <option value="">Seleccionar</option>
-                    <option value="montana">Montaña</option>
-                    <option value="cultural">Cultural</option>
-                    <option value="aventura">Aventura</option>
+                    <?php foreach ($categorias as $categoria) { ?>
+                        <option value="<?php echo $categoria['id']; ?>"><?php echo $categoria['name']; ?></option>
+                    <?php } ?>
                 </select>
                 <span class="error-message">Seleccione una categoría</span>
             </div>

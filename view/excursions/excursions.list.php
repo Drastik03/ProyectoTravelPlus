@@ -29,6 +29,12 @@
                         </ul>
                     </section>
                     <a href="/pages/forms/registrar-excursiones.html" class="excursion-card-button">Reservar ahora</a>
+                    <!-- Botones de editar y eliminar -->
+                    <div class="excursion-card-buttons">
+                        <a href="index.php?app=excursion&action=edit&id=<?php echo $excursion['id']; ?>" class="edit-button">Editar</a>
+                        <a href="index.php?app=excursion&action=delete_exursion&id=<?php echo $excursion['id']; ?>" class="delete-button">Eliminar</a>
+
+                        </div>
                 </div>
             </article>
         <?php } ?>

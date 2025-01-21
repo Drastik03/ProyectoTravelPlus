@@ -221,7 +221,7 @@ public function edit()
                 "La excursión ha sido actualizada correctamente.",
                 "index.php?app=excursion&action=index"
             );
-            header('Location: index.php?app=excursion&action=index');
+            $msg->redirectWithMessage();
         } else {
             $msg = new RedirectWithMessage(
                 false,
@@ -243,6 +243,7 @@ public function edit()
         echo "Error: " . $err->getMessage();
     }
 }
+
 
 
     // Eliminar una excursión

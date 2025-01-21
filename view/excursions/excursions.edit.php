@@ -1,14 +1,14 @@
 <?php require_once HEADER; ?>
+
 <?php
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 ?>
+
 <main class="container">
     <h1 style="font-size: 2rem; text-align: center; font-weight: bold; padding-left: 20px; margin: 20px 0;">Editar Excursión</h1>
-    <?php
-    if (isset($_SESSION['mensaje'])):
-    ?>
+    <?php if (isset($_SESSION['mensaje'])): ?>
         <div class="p-3 alert alert-<?php echo $_SESSION['color']; ?> alert-dismissible fade show" role="alert">
             <?php echo $_SESSION['mensaje']; ?>
         </div>
@@ -18,17 +18,21 @@ if (session_status() == PHP_SESSION_NONE) {
         ?>
     <?php endif; ?>
 
-    <form method="post" id="excursionForm" class="form-grid" action="index.php?app=excursion&action=edit=<?php echo $excursion['id']; ?>" novalidate enctype="multipart/form-data">
+    <form method="post" id="excursionForm" class="form-grid" action="index.php?app=excursion&action=edit" novalidate enctype="multipart/form-data">
+        <input type="hidden" name="id" value="<?php echo $excursion['id']; ?>"> <!-- Aquí se pasa el ID de la excursión -->
+
         <div class="form-group">
             <label for="nombre" class="required">Nombre</label>
             <input type="text" id="nombre" name="nombre" value="<?php echo $excursion['title']; ?>" required>
             <span class="error-message">Este campo es obligatorio</span>
         </div>
+
         <div class="form-group">
             <label for="imagen" class="required">Imagen</label>
             <input type="file" id="image" name="image">
             <span class="error-message">Este campo es obligatorio</span>
         </div>
+
         <div class="form-row">
             <div class="form-group">
                 <label for="categoria" class="required">Categoría</label>
@@ -42,6 +46,7 @@ if (session_status() == PHP_SESSION_NONE) {
                 </select>
                 <span class="error-message">Seleccione una categoría</span>
             </div>
+
             <div class="form-group">
                 <label for="fecha_inicio">Fecha de Inicio:</label>
                 <input type="date" id="fecha_inicio" name="fecha_inicio" value="<?php echo $excursion['start_date']; ?>" required>
@@ -55,6 +60,7 @@ if (session_status() == PHP_SESSION_NONE) {
                 <input type="number" id="duracion" name="duracion" value="<?php echo $excursion['duration']; ?>" min="1" required>
                 <span class="error-message">Ingrese la duración</span>
             </div>
+
             <div class="form-group">
                 <label for="precio" class="required">Precio ($)</label>
                 <input type="number" id="precio" name="precio" value="<?php echo $excursion['price']; ?>" min="0" step="0.01" required>

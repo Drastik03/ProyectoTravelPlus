@@ -18,38 +18,33 @@ if (session_status() == PHP_SESSION_NONE) {
         ?>
     <?php endif; ?>
 
-    <form method="post" id="excursionForm" class="form-grid" action="index.php?app=excursion&action=edit_excursion" novalidate enctype="multipart/form-data">
-        <input type="hidden" name="id" value="<?php echo $excursion->getId(); ?>">
-
+    <form method="post" id="excursionForm" class="form-grid" action="index.php?app=excursion&action=edit=<?php echo $excursion['id']; ?>" novalidate enctype="multipart/form-data">
         <div class="form-group">
             <label for="nombre" class="required">Nombre</label>
-            <input type="text" id="nombre" name="nombre" value="<?php echo $excursion->getTitle(); ?>" required>
+            <input type="text" id="nombre" name="nombre" value="<?php echo $excursion['title']; ?>" required>
             <span class="error-message">Este campo es obligatorio</span>
         </div>
-
         <div class="form-group">
             <label for="imagen" class="required">Imagen</label>
             <input type="file" id="image" name="image">
             <span class="error-message">Este campo es obligatorio</span>
         </div>
-
         <div class="form-row">
             <div class="form-group">
                 <label for="categoria" class="required">Categoría</label>
                 <select id="categoria" name="categoria" required>
                     <option value="">Seleccionar</option>
                     <?php foreach ($categorias as $categoria) { ?>
-                        <option value="<?php echo $categoria['id']; ?>" <?php if ($categoria['id'] == $excursion->getCategoryId()) echo 'selected'; ?>>
+                        <option value="<?php echo $categoria['id']; ?>" <?php if ($categoria['id'] == $excursion['category_id']) echo 'selected'; ?>>
                             <?php echo $categoria['name']; ?>
                         </option>
                     <?php } ?>
                 </select>
                 <span class="error-message">Seleccione una categoría</span>
             </div>
-
             <div class="form-group">
                 <label for="fecha_inicio">Fecha de Inicio:</label>
-                <input type="date" id="fecha_inicio" name="fecha_inicio" value="<?php echo $excursion->getStartDate(); ?>" required>
+                <input type="date" id="fecha_inicio" name="fecha_inicio" value="<?php echo $excursion['start_date']; ?>" required>
                 <span class="error-message">Seleccione una fecha actual o superior</span>
             </div>
         </div>
@@ -57,20 +52,19 @@ if (session_status() == PHP_SESSION_NONE) {
         <div class="form-row">
             <div class="form-group">
                 <label for="duracion" class="required">Duración (horas)</label>
-                <input type="number" id="duracion" name="duracion" value="<?php echo $excursion->getDuration(); ?>" min="1" required>
+                <input type="number" id="duracion" name="duracion" value="<?php echo $excursion['duration']; ?>" min="1" required>
                 <span class="error-message">Ingrese la duración</span>
             </div>
-
             <div class="form-group">
                 <label for="precio" class="required">Precio ($)</label>
-                <input type="number" id="precio" name="precio" value="<?php echo $excursion->getPrice(); ?>" min="0" step="0.01" required>
+                <input type="number" id="precio" name="precio" value="<?php echo $excursion['price']; ?>" min="0" step="0.01" required>
                 <span class="error-message">Ingrese el precio</span>
             </div>
         </div>
 
         <div class="form-group">
             <label for="descripcion" class="required">Descripción</label>
-            <textarea id="descripcion" name="descripcion" required><?php echo $excursion->getDescription(); ?></textarea>
+            <textarea id="descripcion" name="descripcion" required><?php echo $excursion['description']; ?></textarea>
             <span class="error-message">Ingrese una descripción</span>
         </div>
 

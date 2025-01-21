@@ -54,7 +54,8 @@ class ExcursionDao
             $sql = "DELETE FROM excursion WHERE id = :id";
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            return $stmt->execute();
+            $res = $stmt->execute();
+            return $res;
         } catch (PDOException $e) {
             echo "Error en la eliminación: " . $e->getMessage();
             return false;
@@ -93,6 +94,21 @@ class ExcursionDao
                 echo $err->getMessage();
             }
     }
+
+    public function getExcursionById($id)
+    {
+        $sql = "SELECT * FROM excursion WHERE id = :id";
+        try{
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC); 
+        }
+        catch (PDOException $err) {
+            echo $err->getMessage();
+        }
+    }
+
         
    
     

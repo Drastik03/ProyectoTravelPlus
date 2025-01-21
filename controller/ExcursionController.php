@@ -113,28 +113,46 @@ class ExcursionController
         $excursion->__set('start_date', htmlspecialchars($_POST['fecha_inicio'], ENT_QUOTES, 'UTF-8'));
         return $excursion;
     }
+    // Método para ver la edición
     public function view_edit()
-    {
-        $modelCategory = new CategoryDao();
-        $categorias = $modelCategory->getAllCategory();
-        $id = isset($_GET['id']) ? $_GET['id'] : null;
-        if ($id) {
-            $excursion = $this->model->getExcursionById($id);
-            require_once './view/excursions/excursions.edit.php';
+{
+    if (isset($_GET['id'])) {
+        $id = $_GET['id']; // Obtener el ID de la excursión desde la URL
+        $excursion = $this->model->getExcursionById($id); // Obtener la excursión por ID
+        
+        // Verifica si los datos fueron obtenidos correctamente
+        if ($excursion) {
+            // Obtener las categorías para el dropdown
+            $modelCategory = new CategoryDao();
+            $categorias = $modelCategory->getAllCategory();
+
+            // Pasar la excursión y las categorías a la vista
+            require './view/excursions/excursions.edit.php'; 
         } else {
+            echo "No se encontró la excursión."; // Verifica si la excursión existe
             $msg = new RedirectWithMessage(
                 false,
-                "Error: Excursión no encontrada",
-                "No se pudo encontrar la excursión que deseas editar.",
+                "Excursión no encontrada",
+                "No se encontró la excursión que intentas editar.",
                 "index.php?app=excursion&action=index"
             );
-            return;
+            $msg->redirectWithMessage();
         }
+    } else {
+        // Si no se proporciona el ID, redirigir a la lista de excursiones
+        $msg = new RedirectWithMessage(
+            false,
+            "Error: ID faltante",
+            "El ID de la excursión es obligatorio.",
+            "index.php?app=excursion&action=index"
+        );
+        $msg->redirectWithMessage();
     }
-    // Editar una excursión
-    public function edit_excursion()
+}
+
+public function edit()
 {
-    // Validar que sea una solicitud POST
+    // Verificar si el método de la solicitud es POST
     if ($_SERVER['REQUEST_METHOD'] != 'POST') {
         $msg = new RedirectWithMessage();
         $msg->redirectWithMessage(
@@ -147,7 +165,7 @@ class ExcursionController
     }
 
     try {
-        // Verificamos que todos los campos necesarios estén presentes en el POST
+        // Verificar si los campos obligatorios están vacíos
         if (empty($_POST['nombre']) || empty($_POST['categoria']) || empty($_POST['fecha_inicio']) || empty($_POST['descripcion'])) {
             $msg = new RedirectWithMessage(
                 false,
@@ -155,12 +173,14 @@ class ExcursionController
                 "Por favor, complete todos los campos requeridos.",
                 "index.php?app=excursion&action=view_edit&id=" . $_POST['id']
             );
+            $msg->redirectWithMessage();
             return;
         }
 
-        $excursion = $this->clean(); // Limpiar los datos
+        // Limpiar y obtener los datos de la excursión
+        $excursion = $this->clean(); // Asegúrate de que este método esté funcionando correctamente
 
-        // Verificar si hay una imagen cargada
+        // Verificar si se subió una nueva imagen
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
             $fileTmpPath = $_FILES['image']['tmp_name'];
             $fileName = $_FILES['image']['name'];
@@ -168,14 +188,18 @@ class ExcursionController
             $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
 
             if (in_array($fileType, $allowedTypes)) {
+                // Subir la imagen
                 $uploadDir = './assets/images/uploads/excursions/';
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0777, true);
                 }
+
                 $tempFileName = uniqid('excursion_', true) . '.' . pathinfo($fileName, PATHINFO_EXTENSION);
                 $destPath = $uploadDir . $tempFileName;
+
+                // Mover la imagen a la carpeta de destino
                 if (move_uploaded_file($fileTmpPath, $destPath)) {
-                    $excursion->__set('imageRoute', $tempFileName);
+                    $excursion->__set('imageRoute', $tempFileName); // Actualizar la ruta de la imagen
                 }
             } else {
                 $msg = new RedirectWithMessage(
@@ -184,6 +208,7 @@ class ExcursionController
                     "El archivo subido no es una imagen válida.",
                     "index.php?app=excursion&action=view_edit&id=" . $_POST['id']
                 );
+                $msg->redirectWithMessage();
                 return;
             }
         }
@@ -196,6 +221,7 @@ class ExcursionController
                 "La excursión ha sido actualizada correctamente.",
                 "index.php?app=excursion&action=index"
             );
+            header('Location: index.php?app=excursion&action=index');
         } else {
             $msg = new RedirectWithMessage(
                 false,
@@ -203,68 +229,79 @@ class ExcursionController
                 "Hubo un error al actualizar la excursión. Intenta nuevamente.",
                 "index.php?app=excursion&action=view_edit&id=" . $_POST['id']
             );
+            $msg->redirectWithMessage();
         }
     } catch (Exception $err) {
+        // Manejo de errores
         $msg = new RedirectWithMessage(
             false,
             "Error inesperado",
             "Hubo un error inesperado. Intenta nuevamente.",
             "index.php?app=excursion&action=view_edit&id=" . $_POST['id']
         );
+        $msg->redirectWithMessage();
         echo "Error: " . $err->getMessage();
     }
 }
+
+
     // Eliminar una excursión
     public function delete_exursion()
 {
-    // Obtener el id desde la URL
-    $id = isset($_GET['id']) ? $_GET['id'] : null; // Asegurarse de que el id exista
-
+    $id = isset($_GET['id']) ? $_GET['id'] : null;
     if (!$id) {
-        // Si no hay id en la URL, mostramos un mensaje de error
         $msg = new RedirectWithMessage(
             false,
             "Error al eliminar la excursión",
             "No se ha proporcionado un ID válido para la excursión.",
             "index.php?app=excursion&action=index"
         );
-        return; // Salir de la función
+        $msg->redirectWithMessage();
+        return; 
     }
 
     try {
-        // Llamar al modelo para eliminar la excursión
-        $deleted = $this->model->delete($id);
+        // Step 1: Retrieve the image path associated with the excursion
+        $excursion = $this->model->getExcursionById($id);
+        if ($excursion) {
+            $imageRoute = $excursion['imageRoute'];  // Assuming 'imageRoute' is the column name storing the image path
+            $imagePath = './assets/images/uploads/excursions/' . $imageRoute;  // Full path to the image file
+            if (file_exists($imagePath)) {
+                unlink($imagePath);  // Delete the image file from the server
+            }
+        }
 
+        $deleted = $this->model->delete($id);
         if ($deleted) {
-            // Si la eliminación es exitosa
             $msg = new RedirectWithMessage(
                 true,
                 "Excursión eliminada con éxito",
                 "La excursión ha sido eliminada correctamente.",
                 "index.php?app=excursion&action=index"
             );
+            $msg->redirectWithMessage();
         } else {
-            // Si ocurre un error al eliminar
             $msg = new RedirectWithMessage(
                 false,
                 "Error al eliminar la excursión",
                 "Hubo un error al eliminar la excursión. Intenta nuevamente.",
                 "index.php?app=excursion&action=index"
             );
+            $msg->redirectWithMessage();
         }
     } catch (Exception $err) {
-        // Capturar cualquier excepción inesperada
         $msg = new RedirectWithMessage(
             false,
             "Error inesperado",
             "Hubo un error inesperado. Intenta nuevamente.",
             "index.php?app=excursion&action=index"
         );
-        echo "Error: " . $err->getMessage();
+        $msg->redirectWithMessage();
+        echo "Error: " . $err->getMessage() . $err->getFile();
     }
 }
 
-
+    
 
 }
 ?>

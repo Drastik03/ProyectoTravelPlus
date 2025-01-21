@@ -48,4 +48,50 @@ class ExcursionDao
             echo $err->getMessage();
         }
     }
+    public function update($excursion)
+    {
+        $sql = "UPDATE excursion 
+                SET title = :title, image_route = :image_route, description = :description, 
+                    duration = :duration, price = :price, category_id = :category_id, start_date = :start_date
+                WHERE id = :id";
+
+        try {
+            $id = $excursion->__get('id');
+            $title = $excursion->__get('title');
+            $imageRoute = $excursion->__get('imageRoute');
+            $description = $excursion->__get('description');
+            $duration = $excursion->__get('duration');
+            $price = $excursion->__get('price');
+            $categoryId = $excursion->__get('category_id');
+            $startDate = $excursion->__get('start_date');
+
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':title', $title);
+            $stmt->bindParam(':image_route', $imageRoute);
+            $stmt->bindParam(':description', $description);
+            $stmt->bindParam(':duration', $duration);
+            $stmt->bindParam(':price', $price);
+            $stmt->bindParam(':category_id', $categoryId);
+            $stmt->bindParam(':start_date', $startDate);
+
+            return $stmt->execute();
+        } catch (PDOException $err) {
+            echo $err->getMessage();
+        }
+    }
+
+    // Eliminar una excursión
+    public function delete($id)
+    {
+        $sql = "DELETE FROM excursion WHERE id = :id";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (PDOException $err) {
+            echo $err->getMessage();
+        }
+    }
 }

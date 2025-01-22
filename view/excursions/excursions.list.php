@@ -5,6 +5,27 @@
 <main>
     <h1 style="font-size: 2rem; text-align: center; font-weight: bold; padding-left: 20px; margin: 20px 0;">
         Excursiones</h1>
+    <div class="container my-4">
+        <div class="row justify-content-between">
+            <div class="col-auto">
+                <a href="index.php?app=excursion&action=view_new" class="btn btn-success">
+                    <i class="bi bi-plus-circle"></i> Crear Nuevo
+                </a>
+            </div>
+            <div class="col-auto">
+            <form action="index.php?app=excursion&action=search" method="POST" class="d-flex">
+                <input type="text" name="search" class="form-control me-2" 
+                    placeholder="Buscar excursiones..." 
+                    aria-label="Buscar excursiones" >
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search"></i> Buscar
+                </button>
+            </form>
+        </div>
+
+        </div>
+    </div>
+
     <section class="excursiones-container">
         <?php foreach ($excursiones as $excursion) { ?>
             <article class="excursion-card">

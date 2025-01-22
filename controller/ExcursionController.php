@@ -14,6 +14,7 @@ class ExcursionController
     }
     public function index()
     {
+
         $excursiones = $this->model->getExcursion();
         require_once './view/excursions/excursions.list.php';
     }
@@ -22,6 +23,11 @@ class ExcursionController
         $modelCategory = new CategoryDao();
         $categorias = $modelCategory->getAllCategory();
         require_once './view/excursions/excursions.new.php';
+    }
+    public function search() {
+        $parametro = htmlentities($_POST['search'] ?? ""); 
+        $excursiones = $this->model->selectAll($parametro); 
+        require_once './view/excursions/excursions.list.php';
     }
     public function register_excursion()
     {
@@ -56,9 +62,7 @@ class ExcursionController
                 $destPath = $uploadDir . $tempFileName;
                 if (move_uploaded_file($fileTmpPath, $destPath)) {
                     $excursion = $this->clean();
-                    $excursion->__set('imageRoute', $tempFileName); // Asignar la ruta de la imagen al objeto Excursion
-
-                    // Insertar la excursión en la base de datos
+                    $excursion->__set('imageRoute', $tempFileName); 
                     if ($this->model->insert($excursion)) {
                         header('Location:index.php?app=excursion&action=index');
                     } else {
@@ -140,7 +144,6 @@ class ExcursionController
 
 
 
-
     public function delete_exursion()
     {
         $id = isset($_GET['id']) ? $_GET['id'] : null;
@@ -184,12 +187,10 @@ class ExcursionController
                     return;
                 }
 
-                // Manejo de la imagen
                 $imageRoute = null;
                 if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                     $imageRoute = $this->handleImageUpload($_FILES['image']);
                 } else {
-                    // Si no se sube una nueva imagen, usar la existente
                     $imageRoute = $_POST['imageRoute'] ?? null;
                 }
 
@@ -202,8 +203,6 @@ class ExcursionController
                 $excursion->__set('precio', $_POST['precio']);
                 $excursion->__set('descripcion', $_POST['descripcion']);
                 $excursion->__set('imageRoute', $imageRoute);
-
-                // Actualizar la excursión
                 if ($this->model->update($excursion)) {
                     header('Location:index.php?app=excursion&action=index');
                 } else {
@@ -228,24 +227,19 @@ class ExcursionController
             );
         }
     }
-    // Dentro de ExcursionController.php
     public function handleImageUpload($image)
     {
         $uploadDir = './assets/images/uploads/excursions/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true);
         }
-
-        // Validar que la imagen no haya tenido errores en la carga
         if ($image['error'] === UPLOAD_ERR_OK) {
             $fileTmpPath = $image['tmp_name'];
             $fileName = $image['name'];
             $tempFileName = uniqid('excursion_', true) . '.' . pathinfo($fileName, PATHINFO_EXTENSION);
             $destPath = $uploadDir . $tempFileName;
-
-            // Mover el archivo a la ubicación deseada
             if (move_uploaded_file($fileTmpPath, $destPath)) {
-                return $tempFileName;  // Retornar el nombre del archivo
+                return $tempFileName; 
             } else {
                 throw new Exception('Error al subir la imagen');
             }
@@ -253,8 +247,5 @@ class ExcursionController
             throw new Exception('Error en la carga de la imagen');
         }
     }
-
-
-
 }
 ?>

@@ -23,6 +23,37 @@ class ExcursionDao
         }
     }
     
+    
+    public function selectAll($parametro = null) {
+        try {
+            if ($parametro) {
+                $sql = "SELECT excursion.*, category.name AS category_name
+                        FROM excursion
+                        JOIN category ON excursion.category_id = category.id
+                        WHERE excursion.title LIKE :b1
+                        OR category.name LIKE :b2";
+                
+                $parametro = "%" . $parametro . "%";  
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(":b1", $parametro, PDO::PARAM_STR);
+                $stmt->bindParam(":b2", $parametro, PDO::PARAM_STR);
+            } else {
+                $sql = "SELECT excursion.*, category.name AS category_name
+                        FROM excursion
+                        JOIN category ON excursion.category_id = category.id";
+                $stmt = $this->conn->prepare($sql);
+            }
+            
+            $stmt->execute();
+            $excursiones = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            return $excursiones;
+        } catch (PDOException $err) {
+            error_log("Error en selectAll de ExcursionesModel: " . $err->getMessage());
+            return [];
+        }
+    }
+
     public function delete($id)
     {
         try {

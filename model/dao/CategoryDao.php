@@ -1,4 +1,6 @@
 <?php
+//AUTHOR VEAS NOBOA JOHAN DAVID
+
 require_once './config/Connection.php';
 class CategoryDao{
     private $conn;

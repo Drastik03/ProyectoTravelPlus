@@ -1,15 +1,15 @@
-<?php require_once HEADER; ?>
-
 <?php
+//VEAS NOBOA JOHAN DAVID
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 ?>
+<?php require_once HEADER;?>
 
 <main class="container">
     <h1 style="font-size: 2rem; text-align: center; font-weight: bold; padding-left: 20px; margin: 20px 0;">Editar Excursión</h1>
-    <form method="post" id="excursionForm" class="form-grid" action="index.php?app=excursion&action=update_excursion" enctype="multipart/form-data" novalidate>
-        <input type="hidden" name="id" value="<?php echo $excursion['id']; ?>"> <!-- Aquí se pasa el ID de la excursión -->
+    <form method="POST" action="index.php?app=excursion&action=edit" id="excursionForm" class="form-grid" novalidate enctype="multipart/form-data">
+        <input type="hidden" name="id" value="<?php echo $excursion['id']; ?>">
 
         <section class="form-group">
             <label for="nombre" class="required">Nombre</label>
@@ -21,7 +21,6 @@ if (session_status() == PHP_SESSION_NONE) {
             <label for="imagen" class="required">Imagen</label>
             <input type="file" id="image" name="image">
             <span class="error-message">Este campo es obligatorio</span>
-            <!-- Mostrar la imagen actual si existe -->
             <?php if (!empty($excursion['image_route'])): ?>
                 <figure>
                     <img src="./assets/images/uploads/excursions/<?php echo $excursion['image_route']; ?>" alt="Imagen de la excursión" style="width: 150px; margin-top: 10px;">

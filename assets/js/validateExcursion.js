@@ -39,7 +39,8 @@ function validateDate(field) {
 }
 
 form.addEventListener("submit", (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
+
     let isValid = true;
 
     required.forEach((fieldId) => {
@@ -51,6 +52,9 @@ form.addEventListener("submit", (e) => {
 
     if (isValid) {
         console.log("Formulario válido", Object.fromEntries(new FormData(form)));
+        form.submit();  
+    } else {
+        console.log("Formulario no válido");
     }
 });
 

@@ -59,6 +59,7 @@ class ExcursionDao
             $price = $excursion->__get('price');
             $categoryId = $excursion->__get('category_id');
             $startDate = $excursion->__get('start_date');
+
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             $stmt->bindParam(':title', $title, PDO::PARAM_STR);
@@ -67,7 +68,8 @@ class ExcursionDao
             $stmt->bindParam(':duration', $duration, PDO::PARAM_INT);
             $stmt->bindParam(':price', $price, PDO::PARAM_STR);
             $stmt->bindParam(':category_id', $categoryId, PDO::PARAM_INT);
-            $stmt->bindParam(':start_date', $startDate, PDO::PARAM_STR);  
+            $stmt->bindParam(':start_date', $startDate, PDO::PARAM_STR);
+
             if ($stmt->execute()) {
                 return true;
             } else {

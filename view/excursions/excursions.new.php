@@ -1,4 +1,5 @@
 <?php
+//VEAS NOBOA JOHAN DAVID
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }

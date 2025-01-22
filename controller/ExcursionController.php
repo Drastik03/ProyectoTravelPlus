@@ -170,10 +170,55 @@ class ExcursionController
         }
     }
 
-
-    public function update_excursion()
+    public function edit()
     {
-        if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            try {
+                if (empty($_POST['nombre']) || empty($_POST['categoria']) || empty($_POST['fecha_inicio']) || empty($_POST['descripcion'])) {
+                    $msg = new RedirectWithMessage(
+                        false,
+                        "Error: Campos faltantes",
+                        "Por favor, complete todos los campos requeridos.",
+                        "index.php?app=excursion&action=view_edit&id=" . $_POST['id']
+                    );
+                    return;
+                }
+
+                // Manejo de la imagen
+                $imageRoute = null;
+                if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+                    $imageRoute = $this->handleImageUpload($_FILES['image']);
+                } else {
+                    // Si no se sube una nueva imagen, usar la existente
+                    $imageRoute = $_POST['imageRoute'] ?? null;
+                }
+
+                $excursion = $this->clean();
+                $excursion->__set('id', $_POST['id']);
+                $excursion->__set('nombre', $_POST['nombre']);
+                $excursion->__set('categoria', $_POST['categoria']);
+                $excursion->__set('fecha_inicio', $_POST['fecha_inicio']);
+                $excursion->__set('duracion', $_POST['duracion']);
+                $excursion->__set('precio', $_POST['precio']);
+                $excursion->__set('descripcion', $_POST['descripcion']);
+                $excursion->__set('imageRoute', $imageRoute);
+
+                // Actualizar la excursión
+                if ($this->model->update($excursion)) {
+                    header('Location:index.php?app=excursion&action=index');
+                } else {
+                    echo "Error al actualizar la excursión.";
+                }
+            } catch (Exception $err) {
+                $msg = new RedirectWithMessage(
+                    false,
+                    "Error inesperado",
+                    "Hubo un error inesperado. Intenta nuevamente.",
+                    "index.php?app=excursion&action=view_edit&id=" . $_POST['id']
+                );
+                echo "Error: " . $err->getMessage();
+            }
+        } else {
             $msg = new RedirectWithMessage();
             $msg->redirectWithMessage(
                 false,
@@ -181,73 +226,34 @@ class ExcursionController
                 "Solo mediante el método POST",
                 "index.php?app=excursion&action=index"
             );
-            return;
-        }
-        try {
-            if (empty($_POST['nombre']) || empty($_POST['categoria']) || empty($_POST['fecha_inicio']) || empty($_POST['descripcion'])) {
-                $msg = new RedirectWithMessage(
-                    false,
-                    "Error: Campos faltantes",
-                    "Por favor, complete todos los campos requeridos.",
-                    "index.php?app=excursion&action=view_edit&id=" . $_POST['id']
-                );
-                return;
-            }
-
-            // Verificar si la imagen se está subiendo y procesarla si es necesario
-            $imageUpdated = false;
-            $imageRoute = null;
-            if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
-                // Procesar la nueva imagen
-                $fileTmpPath = $_FILES['imagen']['tmp_name'];
-                $fileName = $_FILES['imagen']['name'];
-                $uploadDir = './assets/images/uploads/excursions/';
-                if (!is_dir($uploadDir)) {
-                    mkdir($uploadDir, 0777, true);
-                }
-                $tempFileName = uniqid('excursion_', true) . '.' . pathinfo($fileName, PATHINFO_EXTENSION);
-                $destPath = $uploadDir . $tempFileName;
-                if (move_uploaded_file($fileTmpPath, $destPath)) {
-                    // La imagen se subió correctamente
-                    $imageUpdated = true;
-                    $imageRoute = $tempFileName;
-                } else {
-                    $msg = new RedirectWithMessage(
-                        false,
-                        "Error al subir la imagen",
-                        "Hubo un problema al intentar subir la imagen. Intenta nuevamente.",
-                        "index.php?app=excursion&action=view_edit&id=" . $_POST['id']
-                    );
-                    return;
-                }
-            }
-
-            // Limpiar y obtener los datos de la excursión
-            $excursion = $this->clean();
-            if ($imageUpdated) {
-                $excursion->__set('imageRoute', $imageRoute); // Asignar la nueva ruta de la imagen
-            }
-
-            // Asignar el ID de la excursión para la actualización
-            $excursion->__set('id', $_POST['id']);
-
-            // Actualizar la excursión en la base de datos
-            if ($this->model->update($excursion)) {
-                header('Location:index.php?app=excursion&action=index');
-            } else {
-                echo "Error al actualizar la excursión.";
-            }
-
-        } catch (Exception $err) {
-            $msg = new RedirectWithMessage(
-                false,
-                "Error inesperado",
-                "Hubo un error inesperado. Intenta nuevamente.",
-                "index.php?app=excursion&action=view_edit&id=" . $_POST['id']
-            );
-            echo "Error: " . $err->getMessage();
         }
     }
+    // Dentro de ExcursionController.php
+    public function handleImageUpload($image)
+    {
+        $uploadDir = './assets/images/uploads/excursions/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        // Validar que la imagen no haya tenido errores en la carga
+        if ($image['error'] === UPLOAD_ERR_OK) {
+            $fileTmpPath = $image['tmp_name'];
+            $fileName = $image['name'];
+            $tempFileName = uniqid('excursion_', true) . '.' . pathinfo($fileName, PATHINFO_EXTENSION);
+            $destPath = $uploadDir . $tempFileName;
+
+            // Mover el archivo a la ubicación deseada
+            if (move_uploaded_file($fileTmpPath, $destPath)) {
+                return $tempFileName;  // Retornar el nombre del archivo
+            } else {
+                throw new Exception('Error al subir la imagen');
+            }
+        } else {
+            throw new Exception('Error en la carga de la imagen');
+        }
+    }
+
 
 
 }

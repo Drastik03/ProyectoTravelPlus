@@ -5,6 +5,7 @@ class Excursion
     private $title, $description;
     private $price, $duration;
     private $imageRoute;
+    private $dificult;
     private $category_id;
     private $start_date;
     function __construct() {}

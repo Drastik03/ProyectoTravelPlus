@@ -1,32 +1,9 @@
-<?php
-require_once HEADER;
-//AUTHOR: VEAS NOBOA JOHAN DAVID
-?>
-<?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-?>
+<?php require_once HEADER;
+//AUTHOR: VEAS NOBOA JOHAN DAVID ?>
 <main class="container">
     <h1 style="font-size: 2rem; text-align: center; font-weight: bold; padding-left: 20px; margin: 20px 0;">Nueva
         Excursión</h1>
-    <?php
-    if (isset($_SESSION['mensaje'])):
-    ?>
-        <div class="p-3 alert alert-<?php echo $_SESSION['color']; ?> alert-dismissible fade show" role="alert">
-            <?php echo $_SESSION['mensaje']; ?>
-            <a href="index.php?app=user&action=login" class="text-primary text-decoration-none">
-                <i class="fas fa-sign-in-alt"></i> Iniciar sesión
-            </a>
-        </div>
-
-        <?php
-        unset($_SESSION['mensaje']);
-        unset($_SESSION['color']);
-        ?>
-    <?php endif; ?>
-    <form method="post" id="excursionForm" class="form-grid" action="index.php?app=excursion&action=register_excursion" novalidate
-        enctype="multipart/form-data">
+    <form method="post" id="excursionForm" class="form-grid" action="index.php?app=excursion&action=new" novalidate enctype="multipart/form-data">
         <div class="form-group">
             <label for="nombre" class="required">Nombre</label>
             <input type="text" id="nombre" name="nombre">
@@ -35,7 +12,7 @@ if (session_status() == PHP_SESSION_NONE) {
         <div class="form-group">
             <!--imagn-->
             <label for="imagen" class="required">Imagen</label>
-            <input type="file" id="image" name="image">
+            <input type="file" id="imagen" name="imagen">
             <span class="error-message">Este campo es obligatorio</span>
         </div>
         <div class="form-row">
@@ -78,6 +55,7 @@ if (session_status() == PHP_SESSION_NONE) {
         <div class="actions">
             <button type="reset" class="btn-secondary">Limpiar</button>
             <button type="submit" class="btn-primary">Guardar</button>
+
         </div>
     </form>
 </main>

@@ -1,5 +1,6 @@
-<?php require_once HEADER;
-//AUTHOR: VEAS NOBOA JOHAN DAVID
+<?php require_once HEADER; 
+//AUTHOR VEAS NOBOA JOHAN DAVID
+$usuarioLogueado = isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'];
 ?>
 
 <main>
@@ -8,21 +9,22 @@
     <div class="container my-4">
         <div class="row justify-content-between">
             <div class="col-auto">
-                <a href="index.php?app=excursion&action=view_new" class="btn btn-success">
-                    <i class="bi bi-plus-circle"></i> Crear Nuevo
-                </a>
+                <?php if ($usuarioLogueado) { ?>
+                    <a href="index.php?app=excursion&action=view_new" class="btn btn-success">
+                        <i class="bi bi-plus-circle"></i> Crear Nuevo
+                    </a>
+                <?php } ?>
             </div>
             <div class="col-auto">
-            <form action="index.php?app=excursion&action=search" method="POST" class="d-flex">
-                <input type="text" name="search" class="form-control me-2" 
-                    placeholder="Buscar excursiones..." 
-                    aria-label="Buscar excursiones" >
-                <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-search"></i> Buscar
-                </button>
-            </form>
-        </div>
-
+                <form action="index.php?app=excursion&action=search" method="POST" class="d-flex">
+                    <input type="text" name="search" class="form-control me-2" 
+                        placeholder="Buscar excursiones..." 
+                        aria-label="Buscar excursiones" >
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-search"></i> Buscar
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -50,15 +52,16 @@
                         </ul>
                     </section>
                     <a href="/pages/forms/registrar-excursiones.html" class="excursion-card-button">Reservar ahora</a>
-                    <!-- Botones de editar y eliminar -->
-                    <div class="excursion-card-buttons">
-                        <a href="index.php?app=excursion&action=view_edit&id=<?php echo $excursion['id']; ?>" class="edit-button">Editar</a>
-                        <a href="index.php?app=excursion&action=delete_exursion&id=<?php echo $excursion['id']; ?>" class="delete-button">Eliminar</a>
+                    <?php if ($usuarioLogueado) { ?>
+                        <div class="excursion-card-buttons">
+                            <a href="index.php?app=excursion&action=view_edit&id=<?php echo $excursion['id']; ?>" class="edit-button">Editar</a>
+                            <a href="index.php?app=excursion&action=delete_exursion&id=<?php echo $excursion['id']; ?>" class="delete-button">Eliminar</a>
                         </div>
+                    <?php } ?>
                 </div>
             </article>
         <?php } ?>
     </section>
 </main>
 
-<?php require_once FOOTER; ?>
+<?php require_once FOOTER;  ?>

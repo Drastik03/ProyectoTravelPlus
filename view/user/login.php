@@ -45,7 +45,7 @@
                     class="btn btn-primary w-100" name="btnLogin" />
             </div>
             <div class="mb-3 text-center">
-                <span class="text-center">No tienes una cuenta? <a href="index.php?app=user&action=index" class="card-link">Registrarse</a></span>
+                <span class="text-center">No tienes una cuenta? <a href="index.php?app=user&action=register_new" class="card-link">Registrarse</a></span>
             </div>
         </form>
     </div>

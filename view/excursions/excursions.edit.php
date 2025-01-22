@@ -1,10 +1,16 @@
 <?php
-//VEAS NOBOA JOHAN DAVID
+// AUTHOR: VEAS NOBOA JOHAN DAVID
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+
+if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
+    header('Location: index.php?app=user&action=login');
+    exit();
+}
+
+require_once HEADER; 
 ?>
-<?php require_once HEADER;?>
 
 <main class="container">
     <h1 style="font-size: 2rem; text-align: center; font-weight: bold; padding-left: 20px; margin: 20px 0;">Editar Excursión</h1>

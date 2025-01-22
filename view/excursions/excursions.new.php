@@ -1,23 +1,26 @@
 <?php
-//VEAS NOBOA JOHAN DAVID
+// AUTHOR: VEAS NOBOA JOHAN DAVID
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-?>
-<?php require_once HEADER;
 
-//AUTHOR: VEAS NOBOA JOHAN DAVID ?>
+if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
+    header('Location: index.php?app=user&action=login');
+    exit();
+}
+
+require_once HEADER;
+?>
 <main class="container">
     <h1 style="font-size: 2rem; text-align: center; font-weight: bold; padding-left: 20px; margin: 20px 0;">Nueva
         Excursión</h1>
     <form method="post" action="index.php?app=excursion&action=register_excursion" enctype="multipart/form-data" novalidate>
         <div class="form-group">
-        <label for="nombre" class="required">Nombre</label>
+            <label for="nombre" class="required">Nombre</label>
             <input type="text" id="nombre" name="nombre">
             <span class="error-message">Este campo es obligatorio</span>
         </div>
         <div class="form-group">
-            <!--imagn-->
             <label for="imagen" class="required">Imagen</label>
             <input type="file" id="imagen" name="imagen">
             <span class="error-message">Este campo es obligatorio</span>
@@ -62,7 +65,6 @@ if (session_status() == PHP_SESSION_NONE) {
         <div class="actions">
             <button type="reset" class="btn-secondary">Limpiar</button>
             <button type="submit" class="btn-primary">Guardar</button>
-
         </div>
     </form>
 </main>

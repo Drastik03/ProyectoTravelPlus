@@ -7,7 +7,6 @@ $usuarioLogueado = isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

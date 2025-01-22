@@ -1,11 +1,17 @@
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <?php require_once HEADER;
+
 //AUTHOR: VEAS NOBOA JOHAN DAVID ?>
 <main class="container">
     <h1 style="font-size: 2rem; text-align: center; font-weight: bold; padding-left: 20px; margin: 20px 0;">Nueva
         Excursión</h1>
-    <form method="post" id="excursionForm" class="form-grid" action="index.php?app=excursion&action=new" novalidate enctype="multipart/form-data">
+    <form method="post" action="index.php?app=excursion&action=register_excursion" enctype="multipart/form-data" novalidate>
         <div class="form-group">
-            <label for="nombre" class="required">Nombre</label>
+        <label for="nombre" class="required">Nombre</label>
             <input type="text" id="nombre" name="nombre">
             <span class="error-message">Este campo es obligatorio</span>
         </div>

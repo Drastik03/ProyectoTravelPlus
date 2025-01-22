@@ -33,7 +33,6 @@
                     <div class="excursion-card-buttons">
                         <a href="index.php?app=excursion&action=view_edit&id=<?php echo $excursion['id']; ?>" class="edit-button">Editar</a>
                         <a href="index.php?app=excursion&action=delete_exursion&id=<?php echo $excursion['id']; ?>" class="delete-button">Eliminar</a>
-
                         </div>
                 </div>
             </article>

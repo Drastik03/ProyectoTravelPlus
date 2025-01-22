@@ -23,71 +23,90 @@ class ExcursionController
         $categorias = $modelCategory->getAllCategory();
         require_once './view/excursions/excursions.new.php';
     }
-    public function new(){
-        // Verificar si la solicitud es POST
+    public function register_excursion()
+    {
         if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+            $msg = new RedirectWithMessage();
+            $msg->redirectWithMessage(
+                false,
+                "Error: Método no permitido",
+                "Solo mediante el método POST",
+                "index.php?app=excursion&action=index"
+            );
             return;
         }
-        $excursion = $this->populate();
-        print_r($excursion);
-        //validamos si no estan vacios
-        if(empty($excursion->__get('title')) || empty($excursion->__get('description')) || empty($excursion->__get('price')) || empty($excursion->__get('duration')) || empty($excursion->__get('start_date')) || empty($excursion->__get('category_id'))
-        || empty($excursion->__get('imageRoute'))) {
-            header('Location: index.php?app=excursion&action=view_new');
-        }
-        if (!empty($_FILES['imagen']['name'])) {
-            $tempFileName = $_FILES['imagen']['tmp_name'];
-            $imageRoute = '/assets/images/uploads/excursions/' . basename($_FILES['imagen']['name']);
-            $imageDir = $_SERVER['DOCUMENT_ROOT'] . '/assets/images/uploads/excursions/';
-            if (!is_dir($imageDir)) {
-                if (mkdir($imageDir, 0777, true)) {
-                    echo "Directorio creado con éxito.";
-                } else {
-                    echo "Error al crear el directorio.";
+        try {
+            if (empty($_POST['nombre']) || empty($_POST['categoria']) || empty($_POST['fecha_inicio']) || empty($_POST['descripcion'])) {
+                $msg = new RedirectWithMessage(
+                    false,
+                    "Error: Campos faltantes",
+                    "Por favor, complete todos los campos requeridos.",
+                    "index.php?app=excursion&action=view_new"
+                );
+                return;
+            }
+            if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+                $fileTmpPath = $_FILES['imagen']['tmp_name'];
+                $fileName = $_FILES['imagen']['name'];
+                $uploadDir = './assets/images/uploads/excursions/';
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0777, true);
                 }
-            }
-            if (chmod($imageDir, 0777)) {
-                echo "Permisos cambiados exitosamente.";
+                $tempFileName = uniqid('excursion_', true) . '.' . pathinfo($fileName, PATHINFO_EXTENSION);
+                $destPath = $uploadDir . $tempFileName;
+                if (move_uploaded_file($fileTmpPath, $destPath)) {
+                    $excursion = $this->clean();
+                    $excursion->__set('imageRoute', $tempFileName); // Asignar la ruta de la imagen al objeto Excursion
+
+                    // Insertar la excursión en la base de datos
+                    if ($this->model->insert($excursion)) {
+                        header('Location:index.php?app=excursion&action=index');
+                    } else {
+                        echo "Error al registrar la excursión.";
+                    }
+                } else {
+                    $msg = new RedirectWithMessage(
+                        false,
+                        "Error al subir la imagen",
+                        "Hubo un problema al intentar subir la imagen. Intenta nuevamente.",
+                        "index.php?app=excursion&action=view_new"
+                    );
+                }
             } else {
-                echo "Error al cambiar permisos.";
+                $msg = new RedirectWithMessage(
+                    false,
+                    "Error al procesar el archivo",
+                    "No se ha seleccionado un archivo o el archivo es inválido.",
+                    "index.php?app=excursion&action=view_new"
+                );
             }
-            if (move_uploaded_file($tempFileName, $_SERVER['DOCUMENT_ROOT'] . $imageRoute)) {
-                echo "Archivo subido correctamente.";
-            } else {
-                echo "Error al subir el archivo.";
-            }
+        } catch (Exception $err) {
+            $msg = new RedirectWithMessage(
+                false,
+                "Error inesperado",
+                "Hubo un error inesperado. Intenta nuevamente.",
+                "index.php?app=excursion&action=view_new"
+            );
+            echo "Error: " . $err->getMessage();
         }
-        print_r($excursion);
-        $this->model->insert($excursion);
-        header('Location: index.php?app=excursion&action=index');
-    }
-    private function populate(){
-        // Crear una nueva instancia de Excursión
-        $excursion = new Excursion();
-        
-        // Asignar valores a los campos de la excursión desde $_POST
-        $excursion->__set('title', $_POST['nombre']); // Título de la excursión
-        $excursion->__set('category_id', $_POST['categoria']); // Categoría de la excursión
-        $excursion->__set('description', $_POST['descripcion']); // Descripción
-        $excursion->__set('price', $_POST['precio']); // Precio
-        $excursion->__set('duration', $_POST['duracion']); // Duración
-        $excursion->__set('start_date', $_POST['fecha_inicio']); // Fecha de inicio
-        
-        return $excursion;
     }
 
     public function clean()
     {
         $excursion = new Excursion();
-        $excursion->__set('id', $_POST['id']);
-        $excursion->__set('title', $_POST['nombre']);
-        $excursion->__set('imageRoute', isset($tempFileName) ? $tempFileName : $excursion['image_route']);
-        $excursion->__set('description', $_POST['descripcion']);
-        $excursion->__set('duration', $_POST['duracion']);
-        $excursion->__set('price', $_POST['precio']);
-        $excursion->__set('category_id', $_POST['categoria']);
-        $excursion->__set('start_date', $_POST['fecha_inicio']);
+        $excursion->__set('title', htmlspecialchars($_POST['nombre'], ENT_QUOTES, 'UTF-8'));
+        $excursion->__set('category_id', htmlspecialchars($_POST['categoria'], ENT_QUOTES, 'UTF-8'));
+        $excursion->__set('description', htmlspecialchars($_POST['descripcion'], ENT_QUOTES, 'UTF-8'));
+        if (isset($_FILES['imagen'])) {
+            $excursion->__set('imageRoute', $_FILES['imagen']['name']);
+        }
+        $excursion->__set('price', htmlspecialchars($_POST['precio'], ENT_QUOTES, 'UTF-8'));
+        $excursion->__set('duration', htmlspecialchars($_POST['duracion'], ENT_QUOTES, 'UTF-8'));
+        $excursion->__set('start_date', htmlspecialchars($_POST['fecha_inicio'], ENT_QUOTES, 'UTF-8'));
+        return $excursion;
     }
+
+    
     public function view_edit()
     {
         if (isset($_GET['id'])) {
@@ -152,7 +171,84 @@ class ExcursionController
     }
 
 
-    
+    public function update_excursion()
+    {
+        if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+            $msg = new RedirectWithMessage();
+            $msg->redirectWithMessage(
+                false,
+                "Error: Método no permitido",
+                "Solo mediante el método POST",
+                "index.php?app=excursion&action=index"
+            );
+            return;
+        }
+        try {
+            if (empty($_POST['nombre']) || empty($_POST['categoria']) || empty($_POST['fecha_inicio']) || empty($_POST['descripcion'])) {
+                $msg = new RedirectWithMessage(
+                    false,
+                    "Error: Campos faltantes",
+                    "Por favor, complete todos los campos requeridos.",
+                    "index.php?app=excursion&action=view_edit&id=" . $_POST['id']
+                );
+                return;
+            }
+
+            // Verificar si la imagen se está subiendo y procesarla si es necesario
+            $imageUpdated = false;
+            $imageRoute = null;
+            if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+                // Procesar la nueva imagen
+                $fileTmpPath = $_FILES['imagen']['tmp_name'];
+                $fileName = $_FILES['imagen']['name'];
+                $uploadDir = './assets/images/uploads/excursions/';
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0777, true);
+                }
+                $tempFileName = uniqid('excursion_', true) . '.' . pathinfo($fileName, PATHINFO_EXTENSION);
+                $destPath = $uploadDir . $tempFileName;
+                if (move_uploaded_file($fileTmpPath, $destPath)) {
+                    // La imagen se subió correctamente
+                    $imageUpdated = true;
+                    $imageRoute = $tempFileName;
+                } else {
+                    $msg = new RedirectWithMessage(
+                        false,
+                        "Error al subir la imagen",
+                        "Hubo un problema al intentar subir la imagen. Intenta nuevamente.",
+                        "index.php?app=excursion&action=view_edit&id=" . $_POST['id']
+                    );
+                    return;
+                }
+            }
+
+            // Limpiar y obtener los datos de la excursión
+            $excursion = $this->clean();
+            if ($imageUpdated) {
+                $excursion->__set('imageRoute', $imageRoute); // Asignar la nueva ruta de la imagen
+            }
+
+            // Asignar el ID de la excursión para la actualización
+            $excursion->__set('id', $_POST['id']);
+
+            // Actualizar la excursión en la base de datos
+            if ($this->model->update($excursion)) {
+                header('Location:index.php?app=excursion&action=index');
+            } else {
+                echo "Error al actualizar la excursión.";
+            }
+
+        } catch (Exception $err) {
+            $msg = new RedirectWithMessage(
+                false,
+                "Error inesperado",
+                "Hubo un error inesperado. Intenta nuevamente.",
+                "index.php?app=excursion&action=view_edit&id=" . $_POST['id']
+            );
+            echo "Error: " . $err->getMessage();
+        }
+    }
+
 
 }
 ?>

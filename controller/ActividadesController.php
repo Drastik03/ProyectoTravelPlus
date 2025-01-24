@@ -1,7 +1,7 @@
 <?php
 //AUTHOR: Santacruz Salas Jostin Fabricio
-include_once('../modelo/dao/ActividadesDAO.php');
-include_once('../modelo/dto/ActividadesDTO.php');
+include_once('../model/dao/ActividadesDAO.php');
+include_once('../model/dto/ActividadesDTO.php');
 
 class ActividadesController {
 

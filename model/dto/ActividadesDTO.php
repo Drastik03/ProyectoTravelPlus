@@ -1,6 +1,6 @@
 <?php
 //AUTHOR: Santacruz Salas Jostin Fabricio
-class ActividadDTO {
+class ActividadesDTO {
     public $id;
     public $nombre_actividad;
     public $descripcion;

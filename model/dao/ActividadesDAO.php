@@ -1,6 +1,6 @@
 <?php
 //AUTHOR: Santacruz Salas Jostin Fabricio
-include_once('conexion.php');
+include_once('./config/Connection.php');
 include_once('dto/ActividadesDTO.php');
 
 class ActividadesDAO {

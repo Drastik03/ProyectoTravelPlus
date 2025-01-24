@@ -63,6 +63,24 @@ CREATE TABLE `excursion` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Estructura de tabla para la tabla `actividades`
+--
+
+CREATE TABLE `actividades` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `nombre_actividad` VARCHAR(255) NOT NULL,
+    `descripcion` TEXT,
+    `ubicacion` VARCHAR(255),
+    `hora` TIME,
+    `precio` DECIMAL(10, 2),
+    `imagen` VARCHAR(255),
+    `fecha_creacion` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `fecha_actualizacion` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `usuario_actualizacion` VARCHAR(255)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+--
 -- Volcado de datos para la tabla `excursion`
 --
 
@@ -75,6 +93,15 @@ INSERT INTO `excursion` (`id`, `title`, `image_route`, `description`, `duration`
 (22, 'Crucero al Atardecer por la Costa Dorada', 'excursion_678dc52b27c0d6.93033824.jpg', 'Disfruta de una relajante excursión en barco al atardecer por la impresionante Costa Dorada. Admira el horizonte mientras el sol se sumerge en el océano y degusta una selección de vinos locales y aperitivos.', 72, 999.99, 2, '2025-01-28', '2025-01-20 03:38:19', '2025-01-20 03:38:19'),
 (23, 'Ruta de Senderismo por el Parque Natural', 'excursion_678dc7b630a5e2.30555319.jpg', 'Disfruta de una caminata guiada por los senderos del Parque Natural, donde podrás explorar paisajes de montañas, bosques y ríos. Esta excursión de nivel moderado es ideal para los amantes de la naturaleza que buscan una experiencia tranquila en un entorno protegido. Durante el recorrido, un guía experto compartirá información sobre la flora, fauna y geografía local.', 3, 30.00, 1, '2025-01-28', '2025-01-20 03:49:10', '2025-01-20 03:49:10'),
 (24, 'Excursión al Mirador del Valle Verde', 'excursion_678dc8a125f654.41884261.jpg', 'Únete a nosotros para una caminata relajante hacia el Mirador del Valle Verde, donde podrás disfrutar de impresionantes vistas panorámicas del valle y sus alrededores. A lo largo del recorrido, aprenderás sobre la historia local y las especies autóctonas de la zona. Esta excursión es ideal para quienes buscan disfrutar de la naturaleza sin dificultad física extrema.', 3, 0.00, 3, '2025-01-25', '2025-01-20 03:53:05', '2025-01-20 03:53:05');
+
+--
+-- Volcado de datos para la tabla `actividades`
+--
+
+INSERT INTO `actividades` (`nombre_actividad`, `descripcion`, `ubicacion`, `hora`, `precio`, `imagen`, `usuario_actualizacion`) VALUES
+('Trekking en la montaña', 'Recorrido por los senderos más hermosos de la montaña.', 'Parque Nacional', '10:00:00', 50.00, 'imagen1.jpg', 'admin'),
+('Buceo en la costa', 'Explora la vida marina en la Costa Azul.', 'Costa Azul', '08:00:00', 100.00, 'imagen2.jpg', 'admin');
+
 
 -- --------------------------------------------------------
 

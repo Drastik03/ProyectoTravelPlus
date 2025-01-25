@@ -38,11 +38,14 @@ $usuarioLogueado = isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_
             </a>
 
             <div class="d-none d-md-flex justify-content-center align-items-center gap-3 nav-link-container">
-                <a class="nav-options nav-main-link" href="index.php">Inicio</a>
-                <a class="nav-options nav-main-link" href="/pages/servicios.html">Servicios</a>
-                <a class="nav-options nav-main-link" href="index.php?app=excursion&action=index">Excursiones</a>
-                <a class="nav-options nav-main-link" href="/index.html">Destinos</a>
-                <a class="nav-options nav-main-link" href="/pages/alojamientos.html">Alojamientos</a>
+            <?php
+$loginRedirect = $usuarioLogueado === false ? 'index.php?app=user&action=login' : null;
+?>
+<a class="nav-options nav-main-link" href="<?php echo $loginRedirect ?: 'index.php'; ?>">Inicio</a>
+<a class="nav-options nav-main-link" href="<?php echo $loginRedirect ?: '/pages/servicios.html'; ?>">Servicios</a>
+<a class="nav-options nav-main-link" href="<?php echo $loginRedirect ?: 'index.php?app=excursion&action=index'; ?>">Excursiones</a>
+<a class="nav-options nav-main-link" href="<?php echo $loginRedirect ?: '/index.html'; ?>">Destinos</a>
+<a class="nav-options nav-main-link" href="<?php echo $loginRedirect ?: '/pages/alojamientos.html'; ?>">Alojamientos</a> 
                 
                 <?php if ($usuarioLogueado) { ?>
                     <div class="d-flex align-items-center">

@@ -60,7 +60,7 @@ class UserController
                     true,
                     'El usuario se ha creado correctamente',
                     'No se pudo registrar al usuario',
-                    'index.php?app=user&action=index'
+                    'index.php?app=user&action=login'
                 );
             } else {
                 $msg->redirectWithMessage(

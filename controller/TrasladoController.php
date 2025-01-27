@@ -16,7 +16,7 @@ class TrasladoController
 
     public function index()
     {
-        require_once './view/traslados/traslados.new.php'; // Muestra el formulario de nuevo traslado
+        require_once './view/traslados/traslados.new.php'; 
     }
 
     public function view_new()
@@ -24,7 +24,7 @@ class TrasladoController
        
 
         $traslados = $this->model->getTraslados();
-        require_once './view/traslados/traslados.list.php'; // Cambié a .list.php para mostrar la lista
+        require_once './view/traslados/traslados.list.php'; 
     }
 
     public function view_edit()
@@ -33,7 +33,7 @@ class TrasladoController
         if ($id) {
             $traslado = $this->model->getTrasladoById($id);
             if ($traslado) {
-                require './view/traslados/traslados.edit.php'; // Muestra el formulario de edición
+                require './view/traslados/traslados.edit.php'; 
             } else {
                 $this->redirectWithMessage(false, "Traslado no encontrado", "No se encontró el traslado que intentas editar.", "index.php?app=traslado&action=index");
             }
@@ -50,7 +50,7 @@ class TrasladoController
             return;
         }
     
-        // Validación de campos vacíos
+        
         $missingFields = [];
         if (empty($_POST['origen'])) $missingFields[] = 'Origen';
         if (empty($_POST['destino'])) $missingFields[] = 'Destino';
@@ -65,20 +65,20 @@ class TrasladoController
             return;
         }
     
-        // Intentar registrar el traslado
+       
         try {
-            $traslado = $this->clean();  // Limpieza y preparación de datos
+            $traslado = $this->clean();  
     
-            // Verificar si se insertó correctamente en la base de datos
+           
             if ($this->model->insert($traslado)) {
-                // Mensaje de éxito al registrar el traslado
+                
                 $this->redirectWithMessage(true, "Éxito", "El traslado se registró correctamente.", "index.php?app=traslado&action=index");
             } else {
-                // Mensaje de error si no se pudo insertar el traslado
+                
                 $this->redirectWithMessage(false, "Error al registrar el traslado", "Intenta nuevamente.", "index.php?app=traslado&action=view_new");
             }
         } catch (Exception $err) {
-            // Captura de excepciones y mensaje de error
+           
             $this->redirectWithMessage(false, "Error inesperado", "Hubo un error inesperado. Intenta nuevamente.", "index.php?app=traslado&action=view_new");
         }
     }
@@ -87,11 +87,11 @@ class TrasladoController
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
-                // Limpia y prepara los datos del traslado
+                
                 $traslado = $this->clean();
-                $traslado->setId(filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT)); // Usar el método setter para el ID
+                $traslado->setId(filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT)); 
     
-                // Validar que los campos requeridos no sean nulos
+               
                 $origen = filter_input(INPUT_POST, 'origen', FILTER_SANITIZE_STRING);
                 $destino = filter_input(INPUT_POST, 'destino', FILTER_SANITIZE_STRING);
                 $fecha_recogida = filter_input(INPUT_POST, 'fecha_recogida', FILTER_SANITIZE_STRING);
@@ -99,25 +99,25 @@ class TrasladoController
                 $cantidad_pasajeros = filter_input(INPUT_POST, 'cantidad_pasajeros', FILTER_VALIDATE_INT);
                 $precio = filter_input(INPUT_POST, 'precio', FILTER_VALIDATE_FLOAT);
     
-                // Comprobar si alguno de los campos requeridos está vacío o nulo
+              
                 if (empty($origen) || empty($destino) || empty($fecha_recogida) || empty($hora_recogida) || 
                     is_null($cantidad_pasajeros) || is_null($precio)) {
                     $this->redirectWithMessage(false, "Error: Campos requeridos", "Todos los campos son obligatorios.", "index.php?app=traslado&action=view_edit&id=" . $traslado->getId());
-                    return; // Salir del método si hay un error
+                    return; 
                 }
     
-                // Validar que cantidad de pasajeros y precio sean mayores a 0
+                
                 if ($cantidad_pasajeros <= 0) {
                     $this->redirectWithMessage(false, "Error: Cantidad de Pasajeros", "La cantidad de pasajeros debe ser mayor a 0.", "index.php?app=traslado&action=view_edit&id=" . $traslado->getId());
-                    return; // Salir del método si hay un error
+                    return; 
                 }
     
                 if ($precio <= 0) {
                     $this->redirectWithMessage(false, "Error: Precio", "El precio debe ser mayor a 0.", "index.php?app=traslado&action=view_edit&id=" . $traslado->getId());
-                    return; // Salir del método si hay un error
+                    return; 
                 }
     
-                // Asignar los valores validados al objeto traslado
+                
                 $traslado->setOrigen($origen);
                 $traslado->setDestino($destino);
                 $traslado->setFechaRecogida($fecha_recogida);
@@ -125,7 +125,7 @@ class TrasladoController
                 $traslado->setCantidadPasajeros($cantidad_pasajeros);
                 $traslado->setPrecio($precio);
     
-                // Intenta actualizar el traslado en la base de datos
+                
                 if ($this->model->update($traslado)) {
                     $this->redirectWithMessage(true, "Éxito", "El traslado se actualizó correctamente.", "index.php?app=traslado&action=index");
                 } else {
@@ -149,7 +149,7 @@ class TrasladoController
         $cantidad_pasajeros = filter_input(INPUT_POST, 'cantidad_pasajeros', FILTER_VALIDATE_INT);
         $precio = filter_input(INPUT_POST, 'precio', FILTER_SANITIZE_STRING);
 
-        // Crea un nuevo objeto Traslado con todos los parámetros
+        
         return new Traslado($id, $origen, $destino, $fecha_recogida, $hora_recogida, $cantidad_pasajeros, $precio);
     }
 
@@ -182,7 +182,7 @@ class TrasladoController
     }
     }
 
-    // Método para redirigir con mensaje
+    
     private function redirectWithMessage($success, $title, $message, $redirectUrl)
     {
         $redirect = new RedirectWithMessage();

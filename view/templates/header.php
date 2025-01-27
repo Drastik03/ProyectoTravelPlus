@@ -11,7 +11,7 @@ $usuarioLogueado = isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="./assets/images/logo.svg">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/style.css">
     <link rel="stylesheet" href="./assets/css/home.css">
@@ -20,6 +20,7 @@ $usuarioLogueado = isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_
     <link rel="stylesheet" href="./assets/css/politica.css">
     <link rel="stylesheet" href="./assets/css/excursiones.css">
     <link rel="stylesheet" href="./assets/css/excursion_new.css">
+    <link rel="stylesheet" href="./assets/css/alojamientos.css">
 
     <title>TravelPlus SA</title>
 </head>
@@ -45,7 +46,7 @@ $loginRedirect = $usuarioLogueado === false ? 'index.php?app=user&action=login' 
 <a class="nav-options nav-main-link" href="<?php echo $loginRedirect ?: '/pages/servicios.html'; ?>">Servicios</a>
 <a class="nav-options nav-main-link" href="<?php echo $loginRedirect ?: 'index.php?app=excursion&action=index'; ?>">Excursiones</a>
 <a class="nav-options nav-main-link" href="<?php echo $loginRedirect ?: '/index.html'; ?>">Destinos</a>
-<a class="nav-options nav-main-link" href="<?php echo $loginRedirect ?: '/pages/alojamientos.html'; ?>">Alojamientos</a> 
+<a class="nav-options nav-main-link" href="<?php echo $loginRedirect ?: 'index.php?app=alojamiento&action=index'; ?>">Alojamientos</a> 
                 
                 <?php if ($usuarioLogueado) { ?>
                     <div class="d-flex align-items-center">

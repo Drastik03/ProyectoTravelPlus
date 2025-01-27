@@ -273,3 +273,88 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+-- Insertar el primer alojamiento
+INSERT INTO alojamientos (nombre, ubicacion, tipo, precio, capacidad, disponible, foto_base64, descripcion)
+VALUES (
+    'Casa en la playa', 
+    'Cancún, México', 
+    'Casa', 
+    150.00, 
+    6, 
+    TRUE, 
+    'iVBORw0KGgoAAAANSUhEUgAA...',  -- Placeholder para la foto en base64
+    'Hermosa casa frente al mar con piscina privada y vista al océano.'
+);
+CREATE TABLE alojamientos (
+    id INT PRIMARY KEY AUTO_INCREMENT,  -- Identificador único del alojamiento
+    nombre VARCHAR(255) NOT NULL,       -- Nombre del alojamiento
+    ubicacion VARCHAR(255) NOT NULL,    -- Ubicación del alojamiento
+    tipo VARCHAR(100) NOT NULL,         -- Tipo de alojamiento (e.g., casa, apartamento, hotel)
+    precio DECIMAL(10, 2) NOT NULL,     -- Precio del alojamiento
+    capacidad INT NOT NULL,             -- Capacidad máxima de personas
+    disponible BOOLEAN NOT NULL,        -- Indica si el alojamiento está disponible o no
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Fecha de creación del registro
+    fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Fecha de última actualización
+    foto_base64 LONGTEXT,               -- Foto en formato base64
+    descripcion TEXT,                    -- Descripción del alojamiento (opcional)
+    score DECIMAL(3, 2) DEFAULT 0.00
+);
+-- Insertar el segundo alojamiento
+INSERT INTO alojamientos (nombre, ubicacion, tipo, precio, capacidad, disponible, foto_base64, descripcion)
+VALUES (
+    'Apartamento en el centro', 
+    'Madrid, España', 
+    'Apartamento', 
+    80.00, 
+    4, 
+    FALSE, 
+    NULL,  -- Placeholder para la foto en base64
+    'Acogedor apartamento en el corazón de Madrid, cerca de los principales lugares turísticos.'
+);
+
+CREATE TABLE comentarios_alojamientos (
+    id INT PRIMARY KEY AUTO_INCREMENT,        -- Identificador único del comentario
+    alojamiento_id INT NOT NULL,              -- ID del alojamiento al que se refiere el comentario
+    comentario TEXT NOT NULL,                 -- Texto del comentario
+    score DECIMAL(3, 2) NOT NULL,             -- Calificación dada (rango de 0.00 a 5.00)
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Fecha de creación del comentario
+    FOREIGN KEY (alojamiento_id) REFERENCES alojamientos(id) ON DELETE CASCADE
+);
+
+
+
+DELIMITER //
+
+CREATE TRIGGER actualizar_score_alojamiento
+AFTER INSERT ON comentarios_alojamientos
+FOR EACH ROW
+BEGIN
+    DECLARE promedio DECIMAL(3, 2);
+
+    -- Calcular el nuevo promedio de score para el alojamiento
+    SELECT AVG(score) INTO promedio
+    FROM comentarios_alojamientos
+    WHERE alojamiento_id = NEW.alojamiento_id;
+
+    -- Actualizar el score en la tabla Alojamiento
+    UPDATE alojamientos
+    SET score = promedio
+    WHERE id = NEW.alojamiento_id;
+END //
+
+DELIMITER ;
+
+ALTER TABLE comentarios_alojamientos
+ADD COLUMN user_id INT NOT NULL,
+ADD CONSTRAINT fk_comentarios_user
+FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE;
+
+
+INSERT INTO comentarios_alojamientos (alojamiento_id, comentario, score)
+VALUES (1, 'Un lugar increíble, muy tranquilo y hermoso.', 4.5);
+
+INSERT INTO comentarios_alojamientos (alojamiento_id, comentario, score)
+VALUES (1, 'La cabaña estaba impecable, pero el acceso fue un poco complicado.', 3.8);
+
+

@@ -89,6 +89,7 @@ class UserController
                     $_SESSION['username'] = $user->username;
                     $_SESSION['id'] = $user->id;
                     $_SESSION['user_logged_in'] = true;
+                    $_SESSION['rol_id'] = $user->rol_id;
                     header('Location: index.php?app=index&action=index');
                     exit();
                 } else {

@@ -81,4 +81,21 @@ class UserDAO
             return false;
         }
     }
+    public function getById($id)
+    {
+        $sql = "SELECT * FROM user WHERE id = :id LIMIT 1";
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                return $stmt->fetch(PDO::FETCH_OBJ);
+            } else {
+                return false;
+            }
+        } catch (PDOException $err) {
+            echo "Error: " . $err->getMessage();
+            return false;
+        }
+    }
 }

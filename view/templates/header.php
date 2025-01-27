@@ -43,10 +43,9 @@ $usuarioLogueado = isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_
 $loginRedirect = $usuarioLogueado === false ? 'index.php?app=user&action=login' : null;
 ?>
 <a class="nav-options nav-main-link" href="<?php echo $loginRedirect ?: 'index.php'; ?>">Inicio</a>
-<a class="nav-options nav-main-link" href="<?php echo $loginRedirect ?: '/pages/servicios.html'; ?>">Servicios</a>
 <a class="nav-options nav-main-link" href="<?php echo $loginRedirect ?: 'index.php?app=excursion&action=index'; ?>">Excursiones</a>
-<a class="nav-options nav-main-link" href="<?php echo $loginRedirect ?: '/index.html'; ?>">Destinos</a>
-<a class="nav-options nav-main-link" href="<?php echo $loginRedirect ?: 'index.php?app=alojamiento&action=index'; ?>">Alojamientos</a> 
+<a class="nav-options nav-main-link" href="index.php?app=Traslado&action=index">Traslados</a>
+<a class="nav-options nav-main-link" href="<?php echo $loginRedirect ?: '/pages/alojamientos.html'; ?>">Alojamientos</a> 
                 
                 <?php if ($usuarioLogueado) { ?>
                     <div class="d-flex align-items-center">
@@ -79,9 +78,8 @@ $loginRedirect = $usuarioLogueado === false ? 'index.php?app=user&action=login' 
                 <?php } ?>
 
                 <a class="nav-options" href="index.php">Inicio</a>
-                <a class="nav-options" href="../index.html">Servicios</a>
                 <a class="nav-options" href="index.php?app=excursiones&action=index">Excursiones</a>
-                <a class="nav-options" href="../index.html">Destinos</a>
+                <a class="nav-options nav-main-link" href="index.php?app=Traslado&action=index">Traslados</a>
                 <a class="nav-options" href="../pages/alojamientos.html">Alojamientos</a>
 
                 <?php if ($usuarioLogueado) { ?>

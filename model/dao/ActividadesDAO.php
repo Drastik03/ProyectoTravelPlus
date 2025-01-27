@@ -5,11 +5,18 @@ include_once('dto/ActividadesDTO.php');
 
 class ActividadesDAO {
 
+    private $conn;
+
+    public function __construct() {
+        $connection = new Connection();
+        $this->conn = $connection->getConnection();
+    }
+
     public function crear(ActividadesDTO $actividadesDTO) {
         $sql = "INSERT INTO actividades (nombre_actividad, descripcion, ubicacion, hora, precio, imagen) 
                 VALUES ('{$actividadesDTO->nombre_actividad}', '{$actividadesDTO->descripcion}', '{$actividadesDTO->ubicacion}', '{$actividadesDTO->hora}', '{$actividadesDTO->precio}', '{$actividadesDTO->imagen}')";
 
-        if (mysqli_query($conn, $sql)) {
+        if (mysqli_query($this->conn, $sql)) {
             return true;
         } else {
             return false;
@@ -18,7 +25,7 @@ class ActividadesDAO {
 
     public function obtenerTodas() {
         $sql = "SELECT * FROM actividades";
-        $result = mysqli_query($conn, $sql);
+        $result = mysqli_query($this->conn, $sql);
         $actividades = [];
         
         while ($row = mysqli_fetch_assoc($result)) {
@@ -42,7 +49,7 @@ class ActividadesDAO {
 
     public function obtenerPorId($id) {
         $sql = "SELECT * FROM actividades WHERE id = $id";
-        $result = mysqli_query($conn, $sql);
+        $result = mysqli_query($this->conn, $sql);
         $row = mysqli_fetch_assoc($result);
         
         return new ActividadesDTO(
@@ -69,12 +76,12 @@ class ActividadesDAO {
                 imagen = '{$actividadesDTO->imagen}' 
                 WHERE id = {$actividadesDTO->id}";
         
-        return mysqli_query($conn, $sql);
+        return mysqli_query($this->conn, $sql);
     }
 
     public function eliminar($id) {
         $sql = "DELETE FROM actividades WHERE id = $id";
-        return mysqli_query($conn, $sql);
+        return mysqli_query($this->conn, $sql);
     }
 }
 ?>

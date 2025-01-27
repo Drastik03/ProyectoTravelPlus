@@ -1,4 +1,5 @@
 <?php
+// AUTHOR: VEAS NOBOA JOHAN DAVID
 class Excursion
 {
     private $id;

@@ -6,7 +6,9 @@
             <h1>SUEÑA EN GRANDE</h1>
             <p>Bienvenido a TravelPlus, tu portal de viajes para explorar el mundo. Haz realidad tu sueño de conocer
                 el mundo con precios bajos y un servicio de calidad, ¡inicia tu siguiente aventura!</p>
-            <button id="startHereButton" class="hero-button">Comienza por aquí</button>
+                 <a href="http://localhost/ProyectoTravelPlus-main/index.php?app=user&action=login">
+                    <button id="startHereButton" class="hero-button">Comienza por aquí</button>
+                 </a>
         </div>
     </section>
 
@@ -17,7 +19,6 @@
                 ofreciendo una plataforma intuitiva que centraliza las mejores opciones de vuelos, alojamientos y
                 paquetes turísticos personalizados.</p>
         </div>
-        <button id="toggleObjectiveButton" class="hero-button">Ocultar Objetivo</button>
     </section>
 </main>
 

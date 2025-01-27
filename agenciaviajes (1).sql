@@ -79,6 +79,23 @@ CREATE TABLE `actividades` (
     `usuario_actualizacion` VARCHAR(255)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+---Traslado
+CREATE TABLE traslado (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    origen VARCHAR(100) NOT NULL,
+    destino VARCHAR(100) NOT NULL,
+    fecha_recogida DATE NOT NULL,
+    hora_recogida TIME NOT NULL,
+    cantidad_pasajeros INT NOT NULL,
+    precio DECIMAL(10, 2) NOT NULL
+);
+
+-- Insertar datos en la tabla
+INSERT INTO traslado (origen, destino, fecha_recogida, hora_recogida, cantidad_pasajeros, precio)
+VALUES 
+('Guayaquil', 'Quito', '2025-01-27', '18:59', 4, 123.00);
+
+
 
 --
 -- Volcado de datos para la tabla `excursion`

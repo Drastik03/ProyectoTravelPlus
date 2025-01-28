@@ -1,4 +1,5 @@
 <?php
+//AUTOR: ARIEL ALBERTO SOLIS PINO
 class User{
     private $id;
     private $rol_id;

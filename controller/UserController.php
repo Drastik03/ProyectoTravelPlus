@@ -1,4 +1,5 @@
 <?php
+//AUTOR: ARIEL ALBERTO SOLÍS PINO
 require_once './model/dao/UserDao.php';
 require_once './model/dto/User.php';
 require_once './helpers/redirect.php';

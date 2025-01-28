@@ -1,4 +1,5 @@
 <?php
+//AUTOR: ARIEL ALBERTO SOLÍS PINO
 require_once './config/Connection.php';
 class UserDAO
 {

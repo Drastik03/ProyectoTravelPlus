@@ -45,7 +45,7 @@ $loginRedirect = $usuarioLogueado === false ? 'index.php?app=user&action=login' 
 <a class="nav-options nav-main-link" href="<?php echo $loginRedirect ?: 'index.php'; ?>">Inicio</a>
 <a class="nav-options nav-main-link" href="<?php echo $loginRedirect ?: 'index.php?app=excursion&action=index'; ?>">Excursiones</a>
 <a class="nav-options nav-main-link" href="index.php?app=Traslado&action=index">Traslados</a>
-<a class="nav-options nav-main-link" href="<?php echo $loginRedirect ?: '/pages/alojamientos.html'; ?>">Alojamientos</a> 
+<a class="nav-options nav-main-link" href="<?php echo $loginRedirect ?: 'index.php?app=alojamiento&action=index'; ?>">Alojamientos</a> 
                 
                 <?php if ($usuarioLogueado) { ?>
                     <div class="d-flex align-items-center">
